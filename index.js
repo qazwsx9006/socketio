@@ -16,5 +16,8 @@ const server = app.listen(config.socket.port, async () => {
 io = new Server(server);
 
 io.on("connection", function(socket) {
-  console.log("a user connected");
+  socket.on("messages", async (content, ackCallback) => {
+    socket.broadcast.emit("messages", content);
+    if (ackCallback) ackCallback(content);
+  });
 });

@@ -14,4 +14,11 @@ describe("socket jwt token auth success", () => {
   test("should connect success", function(done) {
     socket.on("connect", done);
   });
+
+  test("test messages event", function(done) {
+    socket.emit("messages", "test message", data => {
+      expect(data).toBe("test message");
+      done();
+    });
+  });
 });
