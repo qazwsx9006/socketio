@@ -16,8 +16,34 @@ const server = app.listen(config.socket.port, async () => {
 io = new Server(server);
 
 io.on("connection", function(socket) {
+  socket.join("system");
+
   socket.on("messages", async (content, ackCallback) => {
     socket.broadcast.emit("messages", content);
     if (ackCallback) ackCallback(content);
+  });
+
+  socket.on("join", async (content, ackCallback) => {
+    const { eventId } = content;
+    socket.join(eventId);
+
+    if (ackCallback) {
+      ackCallback({
+        status: 200,
+        message: `success join ${eventId}`
+      });
+    }
+  });
+
+  socket.on("captcha", async (content, ackCallback) => {
+    const { eventId } = content;
+    socket.broadcast.to(eventId).emit("captcha", content);
+
+    if (ackCallback) {
+      ackCallback({
+        status: 200,
+        message: `broadcast success`
+      });
+    }
   });
 });
