@@ -1,6 +1,7 @@
 const Server = require("socket.io");
 const config = require("config");
 const Koa = require("koa");
+const tixHero = require("./services/tix_hero");
 const app = new Koa();
 let io;
 
@@ -21,6 +22,16 @@ io.on("connection", function(socket) {
   socket.on("messages", async (content, ackCallback) => {
     socket.broadcast.emit("messages", content);
     if (ackCallback) ackCallback(content);
+  });
+
+  socket.on("eventInfo", async (content, ackCallback) => {
+    const { eventKey, platform } = content;
+    if (!eventKey || !platform) {
+      ackCallback({ msg: "參數錯誤" });
+      return;
+    }
+    const event = await tixHero.getEventInfo(eventKey, platform);
+    if (ackCallback) ackCallback(event);
   });
 
   socket.on("join", async (content, ackCallback) => {
