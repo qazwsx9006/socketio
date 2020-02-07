@@ -10,6 +10,7 @@ const getClient = () => {
     const options = {
       useCreateIndex: true,
       useNewUrlParser: true,
+      useUnifiedTopology: true,
       config: { autoIndex: true },
       user: "tix_hero",
       pass: "Rbxb75vS7NzhKIi3",

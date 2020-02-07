@@ -5,6 +5,9 @@ const tixHero = require("./services/tix_hero");
 const app = new Koa();
 let io;
 
+// mask
+const { Store } = reuqire("./models");
+//
 // response;
 app.use(ctx => {
   ctx.body = "Hello Koa";
@@ -56,5 +59,11 @@ io.on("connection", function(socket) {
         message: `broadcast success`
       });
     }
+  });
+
+  socket.on("masks", async (content, ackCallback) => {
+    const { lat, lng, distance = 5 } = content;
+    const stores = await Store.getStore({ lat, lng, distance });
+    if (ackCallback) ackCallback(stores);
   });
 });
