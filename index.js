@@ -8,6 +8,7 @@ let io;
 // mask
 const { Store } = require("./models");
 //
+
 // response;
 app.use(ctx => {
   ctx.body = "Hello Koa";
@@ -68,6 +69,7 @@ io.on("connection", function(socket) {
       lng: parseFloat(lng),
       distance
     });
-    if (ackCallback) ackCallback(stores);
+    const response = stores.map(store => store.responseFormat());
+    if (ackCallback) ackCallback(response);
   });
 });

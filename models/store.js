@@ -59,8 +59,39 @@ const getModels = function() {
         }
       }
     ];
-    const result = await this.aggregate(aggregate);
+    const docs = await this.aggregate(aggregate);
+    const result = docs.map(doc => new this(doc));
+
     return result;
+  };
+
+  schema.methods.responseFormat = function() {
+    const {
+      _id,
+      name,
+      openTime,
+      address,
+      note,
+      maskAdult,
+      maskChild,
+      location,
+      updatedAt
+    } = this;
+
+    const [lng, lat] = location.coordinates;
+
+    return {
+      code: _id,
+      name,
+      openTime,
+      note,
+      address,
+      maskAdult,
+      maskChild,
+      updatedAt,
+      lng,
+      lat
+    };
   };
 
   return conn.model("Store", schema);
