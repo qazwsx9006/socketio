@@ -6,7 +6,7 @@ const app = new Koa();
 let io;
 
 // mask
-const { Store } = reuqire("./models");
+const { Store } = require("./models");
 //
 // response;
 app.use(ctx => {
@@ -62,8 +62,12 @@ io.on("connection", function(socket) {
   });
 
   socket.on("masks", async (content, ackCallback) => {
-    const { lat, lng, distance = 5 } = content;
-    const stores = await Store.getStore({ lat, lng, distance });
+    const { lat, lng, distance = 2 } = content;
+    const stores = await Store.getStore({
+      lat: parseFloat(lat),
+      lng: parseFloat(lng),
+      distance
+    });
     if (ackCallback) ackCallback(stores);
   });
 });
