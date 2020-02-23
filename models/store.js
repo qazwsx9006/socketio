@@ -43,7 +43,8 @@ const getModels = function() {
       }
     },
     createdAt: { type: Date, default: Date.now, required: true },
-    updatedAt: { type: Date, default: Date.now }
+    updatedAt: { type: Date, default: Date.now },
+    saleLog: { type: Object, default: {} }
   };
   let schema = new mongoose.Schema(definition);
 
@@ -77,7 +78,8 @@ const getModels = function() {
       maskChild,
       location,
       updatedAt,
-      condition
+      condition,
+      saleLog
     } = this;
 
     const [lng, lat] = location.coordinates;
@@ -93,7 +95,8 @@ const getModels = function() {
       updatedAt,
       lng,
       lat,
-      condition: condition || {}
+      condition: condition || {},
+      saleLog: saleLog || {}
     };
   };
 
