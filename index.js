@@ -72,4 +72,9 @@ io.on("connection", function(socket) {
     const response = stores.map(store => store.responseFormat());
     if (ackCallback) ackCallback(response);
   });
+
+  socket.on("mingyuMaskAlert", async (content, ackCallback) => {
+    socket.broadcast.emit("maskAlert", content);
+    if (ackCallback) ackCallback(response);
+  });
 });
