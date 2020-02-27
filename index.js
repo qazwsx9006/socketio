@@ -23,6 +23,11 @@ io = new Server(server);
 io.on("connection", function(socket) {
   socket.join("system");
 
+  socket.conn.on("heartbeat", async function() {
+    const token = socket.handshake.query.token;
+    console.log(`${new Date().toLocaleString()} => token`);
+  });
+
   socket.on("messages", async (content, ackCallback) => {
     socket.broadcast.emit("messages", content);
     if (ackCallback) ackCallback(content);
