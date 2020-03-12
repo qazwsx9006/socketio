@@ -85,7 +85,12 @@ io.on("connection", function(socket) {
 
   socket.on("yao", async (content, ackCallback) => {
     const yao = await Yao.create({ rawData: content });
-    // socket.broadcast.emit("maskAlert", content);
+    socket.broadcast.emit("yao", yao);
     if (ackCallback) ackCallback(yao);
+  });
+
+  socket.on("yaoAdmin", async (content, ackCallback) => {
+    const yaos = Yao.find().sort({ _id: -1 });
+    if (ackCallback) ackCallback(yaos);
   });
 });
