@@ -6,7 +6,7 @@ const app = new Koa();
 let io;
 
 // mask
-const { Store } = require("./models");
+const { Store, Yao } = require("./models");
 //
 
 // response;
@@ -81,5 +81,11 @@ io.on("connection", function(socket) {
   socket.on("mingyuMaskAlert", async (content, ackCallback) => {
     socket.broadcast.emit("maskAlert", content);
     if (ackCallback) ackCallback(response);
+  });
+
+  socket.on("yao", async (content, ackCallback) => {
+    const yao = await Yao.create({ rawData: content });
+    // socket.broadcast.emit("maskAlert", content);
+    if (ackCallback) ackCallback(yao);
   });
 });
