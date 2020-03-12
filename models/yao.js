@@ -11,7 +11,6 @@ const conn = mongoose.createConnection("$monogoUrl", {
 
 const getModels = function() {
   const definition = {
-    _id: { type: String, require: true },
     rawData: { type: Object },
     createdAt: { type: Date, default: Date.now, required: true },
     updatedAt: { type: Date, default: Date.now }
