@@ -1,18 +1,34 @@
 const Server = require("socket.io");
 const config = require("config");
 const Koa = require("koa");
+const Router = require("koa-router");
+const cors = require("@koa/cors");
 const tixHero = require("./services/tix_hero");
 const app = new Koa();
+const router = new Router();
 let io;
 
 // mask
 const { Store, Yao } = require("./models");
 //
 
+router
+  .get("/", ctx => {
+    ctx.body = "首頁";
+  })
+  .get("/masks", async ctx => {
+    const { lat, lng, distance = 2 } = ctx.query;
+    const stores = await Store.getStore({
+      lat: parseFloat(lat),
+      lng: parseFloat(lng),
+      distance
+    });
+    const response = stores.map(store => store.responseFormat());
+    ctx.body = response;
+  });
 // response;
-app.use(ctx => {
-  ctx.body = "Hello Koa";
-});
+app.use(cors());
+app.use(router.routes());
 
 const server = app.listen(config.socket.port, async () => {
   console.log(`Server listening on port ${config.socket.port}`);

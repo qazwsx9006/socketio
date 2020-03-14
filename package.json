@@ -9,10 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@koa/cors": "^2.2.3",
     "axios": "^0.19.1",
     "config": "^3.2.4",
     "jest": "^24.9.0",
     "koa": "^2.11.0",
+    "koa-router": "^8.0.8",
     "lodash": "^4.17.15",
     "mongoose": "^5.8.7",
     "socket.io": "^2.3.0"
