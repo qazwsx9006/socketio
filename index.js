@@ -18,6 +18,7 @@ router
   })
   .get("/masks", async ctx => {
     const { lat, lng, distance = 2 } = ctx.query;
+    console.log({ lat, lng, distance = 2 })
     const stores = await Store.getStore({
       lat: parseFloat(lat),
       lng: parseFloat(lng),
