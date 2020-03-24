@@ -2,6 +2,7 @@ const Server = require("socket.io");
 const config = require("config");
 const Koa = require("koa");
 const Router = require("koa-router");
+const bodyParser = require("koa-bodyparser");
 const cors = require("@koa/cors");
 const tixHero = require("./services/tix_hero");
 const app = new Koa();
@@ -11,6 +12,9 @@ let io;
 // mask
 const { Store, Yao } = require("./models");
 //
+
+app.use(cors());
+app.use(bodyParser());
 
 router
   .get("/", ctx => {
@@ -26,9 +30,17 @@ router
     });
     const response = stores.map(store => store.responseFormat());
     ctx.body = response;
+  })
+  .post("/yao", ctx => {
+    const content = ctx.request.body;
+    const yao = await Yao.create({ rawData: content });
+    ctx.body = yao;
+  })
+  .get("/yaoAdmin", ctx => {
+    const yaos = Yao.find().sort({ _id: -1 });
+    ctx.body = yaos;
   });
 // response;
-app.use(cors());
 app.use(router.routes());
 
 const server = app.listen(config.socket.port, async () => {
