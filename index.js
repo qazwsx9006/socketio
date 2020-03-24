@@ -36,7 +36,7 @@ router
     const yao = await Yao.create({ rawData: content });
     ctx.body = yao;
   })
-  .get("/yaoAdmin", ctx => {
+  .get("/yaoAdmin", async (ctx) => {
     const yaos = await Yao.find().sort({ _id: -1 });
     ctx.body = yaos;
   });
