@@ -31,12 +31,12 @@ router
     const response = stores.map(store => store.responseFormat());
     ctx.body = response;
   })
-  .post("/yao", ctx => {
+  .post("/yao", async ctx => {
     const content = ctx.request.body;
     const yao = await Yao.create({ rawData: content });
     ctx.body = yao;
   })
-  .get("/yaoAdmin", async (ctx) => {
+  .get("/yaoAdmin", async ctx => {
     const yaos = await Yao.find().sort({ _id: -1 });
     ctx.body = yaos;
   });
