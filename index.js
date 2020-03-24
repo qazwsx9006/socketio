@@ -37,7 +37,7 @@ router
     ctx.body = yao;
   })
   .get("/yaoAdmin", ctx => {
-    const yaos = Yao.find().sort({ _id: -1 });
+    const yaos = await Yao.find().sort({ _id: -1 });
     ctx.body = yaos;
   });
 // response;
@@ -119,7 +119,7 @@ io.on("connection", function(socket) {
   });
 
   socket.on("yaoAdmin", async (content, ackCallback) => {
-    const yaos = Yao.find().sort({ _id: -1 });
+    const yaos = await Yao.find().sort({ _id: -1 });
     if (ackCallback) ackCallback(yaos);
   });
 });
