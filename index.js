@@ -17,26 +17,26 @@ app.use(cors());
 app.use(bodyParser());
 
 router
-  .get("/", ctx => {
+  .get("/", (ctx) => {
     ctx.body = "首頁";
   })
-  .get("/masks", async ctx => {
+  .get("/masks", async (ctx) => {
     const { lat, lng, distance = 2 } = ctx.query;
     console.log({ lat, lng, distance });
     const stores = await Store.getStore({
       lat: parseFloat(lat),
       lng: parseFloat(lng),
-      distance
+      distance,
     });
-    const response = stores.map(store => store.responseFormat());
+    const response = stores.map((store) => store.responseFormat());
     ctx.body = response;
   })
-  .post("/yao", async ctx => {
+  .post("/yao", async (ctx) => {
     const content = ctx.request.body;
     const yao = await Yao.create({ rawData: content });
     ctx.body = yao;
   })
-  .get("/yaoAdmin", async ctx => {
+  .get("/yaoAdmin", async (ctx) => {
     const yaos = await Yao.find().sort({ _id: -1 });
     ctx.body = yaos;
   });
@@ -49,10 +49,10 @@ const server = app.listen(config.socket.port, async () => {
 
 io = new Server(server);
 
-io.on("connection", function(socket) {
+io.on("connection", function (socket) {
   socket.join("system");
 
-  socket.conn.on("heartbeat", async function() {
+  socket.conn.on("heartbeat", async function () {
     const token = socket.handshake.query.token;
     console.log(`${new Date().toLocaleString()} => token`);
   });
@@ -79,7 +79,7 @@ io.on("connection", function(socket) {
     if (ackCallback) {
       ackCallback({
         status: 200,
-        message: `success join ${eventId}`
+        message: `success join ${eventId}`,
       });
     }
   });
@@ -91,7 +91,7 @@ io.on("connection", function(socket) {
     if (ackCallback) {
       ackCallback({
         status: 200,
-        message: `broadcast success`
+        message: `broadcast success`,
       });
     }
   });
@@ -101,9 +101,9 @@ io.on("connection", function(socket) {
     const stores = await Store.getStore({
       lat: parseFloat(lat),
       lng: parseFloat(lng),
-      distance
+      distance,
     });
-    const response = stores.map(store => store.responseFormat());
+    const response = stores.map((store) => store.responseFormat());
     if (ackCallback) ackCallback(response);
   });
 
@@ -121,5 +121,14 @@ io.on("connection", function(socket) {
   socket.on("yaoAdmin", async (content, ackCallback) => {
     const yaos = await Yao.find().sort({ _id: -1 });
     if (ackCallback) ackCallback(yaos);
+  });
+
+  socket.on("debug", async (content, ackCallback) => {
+    socket.emit("testAck", content, (data) => {
+      console.log(`testAck ${data}`);
+      socket.emit("receiveTestAck", `testAck ${data}`);
+    });
+
+    if (ackCallback) ackCallback({ receive: { content } });
   });
 });
