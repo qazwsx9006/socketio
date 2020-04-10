@@ -124,10 +124,19 @@ io.on("connection", function (socket) {
   });
 
   socket.on("debug", async (content, ackCallback) => {
-    socket.emit("testAck", content, (data) => {
-      console.log(`testAck ${data}`);
-      socket.emit("receiveTestAck", `testAck ${data}`);
-    });
+    socket.emit(
+      "testAck",
+      `trigger by debug with [${JSON.stringify(content)}]`,
+      (data) => {
+        console.log(`testAck ${data}`);
+        socket.emit(
+          "receiveTestAck",
+          `receive ack from testAck success. receive body is [${JSON.stringify(
+            data
+          )}]`
+        );
+      }
+    );
 
     if (ackCallback) ackCallback({ receive: { content } });
   });
