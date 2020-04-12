@@ -31,6 +31,17 @@ router
     const response = stores.map((store) => store.responseFormat());
     ctx.body = response;
   })
+  .get("/v2/masks", async (ctx) => {
+    const { lat, lng, distance = 2 } = ctx.query;
+    console.log({ lat, lng, distance });
+    const stores = await Store.getStore({
+      lat: parseFloat(lat),
+      lng: parseFloat(lng),
+      distance,
+    });
+    const response = stores.map((store) => store.responseFormatV2());
+    ctx.body = response;
+  })
   .post("/yao", async (ctx) => {
     const content = ctx.request.body;
     const yao = await Yao.create({ rawData: content });
