@@ -14,9 +14,9 @@ const getClient = () => {
       config: { autoIndex: true },
       user: "tix_hero",
       pass: "Rbxb75vS7NzhKIi3",
-      readPreference: "secondaryPreferred"
+      readPreference: "secondaryPreferred",
     };
-    mongoose.connect(uris, options, function(err) {
+    mongoose.connect(uris, options, function (err) {
       if (err) console.error(err);
     });
 
@@ -29,13 +29,13 @@ const getClient = () => {
   return models;
 };
 
-const getModels = function() {
+const getModels = function () {
   const modelNames = fs
     .readdirSync(__dirname)
-    .filter(file => !(/^(index|plugins)/.test(file) || /test/.test(file)))
-    .map(file => file.split(".")[0]);
+    .filter((file) => !(/^(index|plugins)/.test(file) || /test/.test(file)))
+    .map((file) => file.split(".")[0]);
   let result = {};
-  _.map(modelNames, modelName => {
+  _.map(modelNames, (modelName) => {
     const camelCaseModelName = _.upperFirst(_.camelCase(modelName));
     result[camelCaseModelName] = require(`./${modelName}`)();
     return modelName;
